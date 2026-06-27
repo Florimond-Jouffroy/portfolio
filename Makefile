@@ -106,6 +106,12 @@ cc: ## Vide le cache de l'application Symfony
 vendor: ## Installe les dépendances PHP via Composer
 	$(PHP_CONT) composer install
 
+composer-update: ## Met à jour l'intégralité des dépendances Composer (composer update)
+	$(PHP_CONT) composer update
+
+composer-update-pkg: ## Met à jour un paquet spécifique (usage: make update-pkg cmd="symfony/uid")
+	$(PHP_CONT) composer update $(cmd)
+
 composer: ## Exécute une commande composer libre (usage: make composer cmd="require symfony/uid")
 	$(PHP_CONT) composer $(cmd)
 

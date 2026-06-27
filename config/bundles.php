@@ -12,4 +12,8 @@ return [
     Symfony\Bundle\MakerBundle\MakerBundle::class => ['dev' => true],
     Symfony\UX\StimulusBundle\StimulusBundle::class => ['all' => true],
     Symfony\UX\React\ReactBundle::class => ['all' => true],
+    Florimond\LogBundle\LogBundle::class => ['all' => true],
+    Florimond\MultiDbMigrationsBundle\FlorimondMultiDbMigrationsBundle::class => ['all' => true],
+    Symfony\Bundle\SecurityBundle\SecurityBundle::class => ['all' => true],
+    Florimond\CoreBundle\FlorimondCoreBundle::class => ['all' => true],
 ];

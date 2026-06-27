@@ -136,7 +136,7 @@ docker compose --env-file .env.docker.local -p "${project_name}" exec app bin/co
 
 echo -e "${YELLOW}⚡ Génération des fichiers de migrations initiaux (Main + Log) via ton bundle...${NC}"
 
-# 1. Génération et patch automatique pour la base PRINCIPALE via ton bundle (Remplace avantageusement make:migration)
+# 1. Génération et patch automatique pour la base PRINCIPALE via ton bundle
 docker compose --env-file .env.docker.local -p "${project_name}" exec app bin/console florimond:migrations:diff main --no-interaction
 
 # 2. Vérification et génération pour la base de LOGS
@@ -144,13 +144,15 @@ log_migration_count=$(docker compose --env-file .env.docker.local -p "${project_
 
 if [ "${log_migration_count}" -eq 0 ]; then
     echo -e "${YELLOW}⚡ Première installation : Génération de la migration pour la base de logs via ton bundle...${NC}"
-    # On laisse ton bundle générer et patcher le fichier de structure de la DB log
-    docker compose --env-file .env.docker.local -p "${project_name}" exec app bin/console florimond:migrations:diff log --no-interaction > /dev/null 2>&1
+    # 🌟 FIX : On passe "yes" via un pipe pour valider automatiquement toute question bloquante de Doctrine
+    yes | docker compose --env-file .env.docker.local -p "${project_name}" exec app bin/console florimond:migrations:diff log --no-interaction > /dev/null 2>&1
 fi
 
 echo -e "${YELLOW}⏳ Exécution finale et synchronisation des tables...${NC}"
 docker compose --env-file .env.docker.local -p "${project_name}" exec app bin/console florimond:migrations:migrate main --no-interaction
 docker compose --env-file .env.docker.local -p "${project_name}" exec app bin/console florimond:migrations:migrate log --no-interaction
+
+
 
 echo -e "\n${YELLOW}🎨 Compilation des assets Frontend (Webpack Encore)...${NC}"
 docker compose --env-file .env.docker.local -p "${project_name}" exec app npm install
